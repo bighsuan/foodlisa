@@ -9,15 +9,23 @@
 
 ## Usage
 
+安裝需要package
+```
+cd app
+go mod download
+```
+
 建 image
 ```
-docker build -t lisa/foodlisa:1.1 docker/foodlisa_1.1 
+docker build -t lisa/foodlisa:1.1 ../docker/foodlisa_1.1 
 ```
 
 建container
 ```
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f ../docker/docker-compose.yml up -d
 ```
+
+
 
 打開localhost:8080即可看到
 ```

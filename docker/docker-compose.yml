@@ -16,7 +16,7 @@ services:
     environment:
       - PMA_HOST=db
 
-      foodlisa:
+  foodlisa:
     container_name: foodlisa
     image: lisa/foodlisa:1.1
     restart: always
