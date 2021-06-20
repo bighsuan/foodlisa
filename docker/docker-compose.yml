@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      - PMA_HOST=db
+
+      foodlisa:
+    container_name: foodlisa
+    image: lisa/foodlisa:1.1
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ~/code/foodlisa/app:/app:delegated
+    links:
+      - db
+    # stdin_open: true # -i
+    # tty: true        # -t
