@@ -1,0 +1,984 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "指定物流出貨(甲配)",
+      "version": "1.0",
+      "description": "轉單訂單的指定物流出貨功能(甲配)相關API"
+    },
+    "servers": [
+      {
+        "url": "https://ecvdr.pchome.com.tw/{directory}",
+        "description": "正式API",
+        "variables": {
+          "directory": {
+            "default": "api/order/v1.1/index.php"
+          }
+        }
+      },
+      {
+        "url": "https://ecvdr.ec1.mypchome.com.tw/{directory}",
+        "description": "測試API",
+        "variables": {
+          "directory": {
+            "default": "api/order/v1.1/index.php"
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "name": "指定物流出貨"
+      }
+    ],
+    "paths": {
+      "/trans/core/vendor/{vendor}/order/meta": {
+        "get": {
+          "summary": "查詢轉單訂單Meta: 用轉單日區間、出貨狀態、取件狀態、關鍵字(訂單編號、託運單號)、預計取件日",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "$ref": "#/components/parameters/transdate"
+            },
+            {
+              "$ref": "#/components/parameters/shipStatus"
+            },
+            {
+              "$ref": "#/components/parameters/takeStatus"
+            },
+            {
+              "$ref": "#/components/parameters/q"
+            },
+            {
+              "$ref": "#/components/parameters/takeDate"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "查詢成功",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/OrderMetaResponse"
+                  },
+                  "example": {
+                    "TotalRows": 12,
+                    "Order": {
+                      "TotalQty": 22,
+                      "TotalCost": 1050
+                    },
+                    "Refund": {
+                      "TotalQty": 2,
+                      "TotalCost": 100
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/core/vendor/{vendor}/order": {
+        "get": {
+          "summary": "查詢轉單訂單編號(Core): 用轉單日區間、出貨狀態、取件狀態、關鍵字(訂單編號、託運單號)、預計取件日",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "$ref": "#/components/parameters/transdate"
+            },
+            {
+              "$ref": "#/components/parameters/shipStatus"
+            },
+            {
+              "$ref": "#/components/parameters/takeStatus"
+            },
+            {
+              "$ref": "#/components/parameters/q"
+            },
+            {
+              "$ref": "#/components/parameters/takeDate"
+            },
+            {
+              "$ref": "#/components/parameters/offset"
+            },
+            {
+              "$ref": "#/components/parameters/limit"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "查詢成功",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CoreOrderResponse"
+                  },
+                  "example": {
+                    "TotalRows": 3,
+                    "Rows": [
+                      {
+                        "Id": "20210707522762-01"
+                      },
+                      {
+                        "Id": "20210707522762-02"
+                      },
+                      {
+                        "Id": "20210707555874-01"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/order": {
+        "get": {
+          "summary": "查詢轉單訂單明細(DB): 用訂單編號",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "$ref": "#/components/parameters/orderId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "查詢成功",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DbOrderResponse"
+                  },
+                  "example": [
+                    {
+                      "Id": "20210707522732-01",
+                      "TransDate": "2021/01/20",
+                      "Prod": {
+                        "Id": "DXBD3X-A900AVSLQ-000",
+                        "Name": "【New Balance】復古運動鞋_中性_深藍_CTCBW",
+                        "Qty": 1
+                      },
+                      "ShipInfo": {
+                        "ShipId": "900888948701",
+                        "ShipVendorId": "0000000004",
+                        "ShipVendorName": "宅配通",
+                        "ExpectedDate": "2021/01/21"
+                      },
+                      "isShip": 1,
+                      "isTake": 1
+                    },
+                    {
+                      "Id": "20210707522745-01",
+                      "TransDate": "2021/01/29",
+                      "Prod": {
+                        "Id": "QAAO8K-A900865BS-000",
+                        "Name": "Ink case 雙螢幕手機殼 for iPhone7",
+                        "Qty": 1
+                      },
+                      "ShipInfo": {
+                        "ShipId": "",
+                        "ShipVendorId": "",
+                        "ShipVendorName": "",
+                        "ExpectedDate": ""
+                      },
+                      "isShip": 0,
+                      "isTake": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/logistic": {
+        "get": {
+          "summary": "查詢支援物流商: 用訂單編號",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "$ref": "#/components/parameters/orderId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LogisticResponse"
+                  },
+                  "example": [
+                    {
+                      "Id": "20210707522732-01",
+                      "LogisticList": [
+                        {
+                          "id": "0000000001",
+                          "name": "大榮"
+                        },
+                        {
+                          "id": "0000000002",
+                          "name": "黑貓"
+                        },
+                        {
+                          "id": "0000000004",
+                          "name": "宅配通"
+                        }
+                      ]
+                    },
+                    {
+                      "Id": "20210707522745-01",
+                      "LogisticList": [
+                        {
+                          "id": "0000000002",
+                          "name": "黑貓"
+                        },
+                        {
+                          "id": "0000000004",
+                          "name": "宅配通"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/fee": {
+        "get": {
+          "summary": "運費試算",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "name": "logistic",
+              "description": "物流商編號",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "0000000004"
+            },
+            {
+              "name": "length",
+              "description": "長",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "example": 20
+            },
+            {
+              "name": "width",
+              "description": "寬",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "example": 20
+            },
+            {
+              "name": "height",
+              "description": "高",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "example": 20
+            },
+            {
+              "name": "weight",
+              "description": "重量",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "example": 1500
+            },
+            {
+              "name": "temp",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "description": "溫層:\n * 1 : 常溫\n * 2 : 冷藏\n * 3 : 冷凍\n"
+            },
+            {
+              "name": "area",
+              "description": "區域",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "台北市"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FeeResponse"
+                  },
+                  "example": {
+                    "Cost": 100
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/ship-order": {
+        "post": {
+          "summary": "新增託運單",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShipOrderRequest"
+                },
+                "example": [
+                  {
+                    "Id": [
+                      "20210707522732-01"
+                    ],
+                    "Logistic": "0000000002",
+                    "Temp": 1,
+                    "Box": 1
+                  },
+                  {
+                    "Id": [
+                      "20210707522745-01",
+                      "20210707522745-02"
+                    ],
+                    "Logistic": "0000000002",
+                    "Temp": 1,
+                    "Box": 1
+                  },
+                  {
+                    "Id": [
+                      "20210707522789-01"
+                    ],
+                    "Logistic": "0000000001",
+                    "Temp": 1,
+                    "Box": 2
+                  }
+                ]
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ShipOrderResponse"
+                  },
+                  "example": {
+                    "SuccessCount": 1,
+                    "ErrorCount": 1,
+                    "ErrorMsg": {
+                      "Id": "20210707522732-01",
+                      "Code": "400-003",
+                      "Msg": "Update Fail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        },
+        "delete": {
+          "summary": "作廢託運單",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            },
+            {
+              "$ref": "#/components/parameters/shipId"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ShipOrderResponse"
+                  },
+                  "example": {
+                    "SuccessCount": 1,
+                    "ErrorCount": 1,
+                    "ErrorMsg": {
+                      "Id": "98737870",
+                      "Code": "400-003",
+                      "Msg": "Update Fail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/ship-order/export": {
+        "post": {
+          "summary": "列印託運單",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShipOrderExportRequest"
+                },
+                "example": {
+                  "ShipId": [
+                    "900888948701",
+                    "900888948702",
+                    "900888948703",
+                    "900888948704",
+                    "900888948705"
+                  ]
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/ship-summary/export": {
+        "post": {
+          "summary": "列印出貨總表",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShipSummaryExportRequest"
+                },
+                "example": [
+                  {
+                    "OrderId": "20210707522732",
+                    "ShipId": [
+                      "900888948701"
+                    ]
+                  },
+                  {
+                    "OrderId": "20210707522745",
+                    "ShipId": [
+                      "900888948702",
+                      "900888948703",
+                      "900888948704"
+                    ]
+                  },
+                  {
+                    "OrderId": "20210707522789",
+                    "ShipId": [
+                      "900888948706"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      },
+      "/trans/db/vendor/{vendor}/picklist/export": {
+        "post": {
+          "summary": "列印揀貨單",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/vendorId"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PickListExportRequest"
+                },
+                "example": [
+                  {
+                    "OrderId": [
+                      "20210707522732-01",
+                      "20210707522732-02",
+                      "20210707522732-03"
+                    ]
+                  },
+                  {
+                    "OrderId": [
+                      "20210707522745-01"
+                    ]
+                  },
+                  {
+                    "OrderId": [
+                      "20210707522789-01",
+                      "20210707522789-02"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          },
+          "tags": [
+            "指定物流出貨"
+          ]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Order": {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "string",
+              "description": "訂單編號"
+            },
+            "TransDate": {
+              "type": "string",
+              "description": "轉單日期"
+            },
+            "Prod": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "description": "商品編號"
+                },
+                "Name": {
+                  "type": "string",
+                  "description": "商品名稱"
+                },
+                "Qty": {
+                  "type": "integer",
+                  "description": "購買數量"
+                }
+              }
+            },
+            "ShipInfo": {
+              "type": "object",
+              "properties": {
+                "ShipId": {
+                  "type": "string",
+                  "description": "託運單號"
+                },
+                "ShipVendorId": {
+                  "type": "string",
+                  "description": "物流商編號"
+                },
+                "ShipVendorName": {
+                  "type": "string",
+                  "description": "物流商名稱"
+                },
+                "ExpectedDate": {
+                  "type": "string",
+                  "description": "預計取件日"
+                }
+              }
+            },
+            "isShip": {
+              "type": "boolean",
+              "description": "是否已出貨:\n\n  0: 否\n  1: 是\n"
+            },
+            "isTake": {
+              "type": "boolean",
+              "description": "是否已取件:\n\n  0: 否\n  1: 是\n"
+            }
+          }
+        },
+        "OrderMetaResponse": {
+          "type": "object",
+          "properties": {
+            "TotalRows": {
+              "type": "integer",
+              "description": "總筆數"
+            },
+            "Order": {
+              "type": "object",
+              "properties": {
+                "TotalQty": {
+                  "type": "integer",
+                  "description": "訂購總數量"
+                },
+                "TotalCost": {
+                  "type": "integer",
+                  "description": "訂購總金額"
+                }
+              }
+            },
+            "Refund": {
+              "type": "object",
+              "properties": {
+                "TotalQty": {
+                  "type": "integer",
+                  "description": "取消總數量"
+                },
+                "TotalCost": {
+                  "type": "integer",
+                  "description": "取消總金額"
+                }
+              }
+            }
+          }
+        },
+        "CoreOrderResponse": {
+          "type": "object",
+          "properties": {
+            "TotalRows": {
+              "type": "integer",
+              "description": "訂單筆數"
+            },
+            "Rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "description": "訂單編號"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DbOrderResponse": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Order"
+          }
+        },
+        "FeeResponse": {
+          "type": "object",
+          "properties": {
+            "Cost": {
+              "type": "integer",
+              "description": "運費金額"
+            }
+          }
+        },
+        "LogisticResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Id": {
+                "type": "string",
+                "description": "訂單編號"
+              },
+              "LogisticList": {
+                "type": "array",
+                "description": "物流商列表",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "string",
+                      "description": "物流商編號"
+                    },
+                    "Name": {
+                      "type": "string",
+                      "description": "物流商名稱"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ShipOrderRequest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Id": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "訂單編號"
+                }
+              },
+              "Logistic": {
+                "type": "string",
+                "description": "物流商編號"
+              },
+              "Temp": {
+                "type": "integer",
+                "description": "溫層:\n\n  1:常溫 2:冷藏 3:冷凍\n"
+              },
+              "Box": {
+                "type": "integer",
+                "description": "箱數"
+              }
+            }
+          }
+        },
+        "ShipOrderResponse": {
+          "type": "object",
+          "properties": {
+            "SuccessCount": {
+              "type": "integer",
+              "description": "成功數量"
+            },
+            "ErrorCount": {
+              "type": "integer",
+              "description": "錯誤數量"
+            },
+            "ErrorMsg": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "description": "訂單編號"
+                  },
+                  "Code": {
+                    "type": "string",
+                    "description": "錯誤代碼:\n  * 400-001 : Invalid Data[Key] - 資料格式錯誤\n  * 400-002 : Missing Data[Key] - 欄位缺漏\n  * 400-003 : Update Fail - 修改資料失敗\n  * 400-004 : Id Not Exists - 單號不存在\n"
+                  },
+                  "Msg": {
+                    "type": "string",
+                    "description": "錯誤訊息"
+                  }
+                }
+              },
+              "description": "錯誤資訊"
+            }
+          }
+        },
+        "ShipOrderExportRequest": {
+          "type": "object",
+          "properties": {
+            "ShipId": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "託運單號"
+              }
+            }
+          }
+        },
+        "ShipSummaryExportRequest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "OrderId": {
+                "type": "string",
+                "description": "訂單編號"
+              },
+              "ShipId": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "託運單號"
+                }
+              }
+            }
+          }
+        },
+        "PickListExportRequest": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "OrderId": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "訂單編號"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": {
+        "vendorId": {
+          "name": "vendor",
+          "description": "廠商ID",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": 28615
+        },
+        "orderId": {
+          "name": "id",
+          "description": "訂單編號",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "20210707522732-01, 20210707522745-01"
+        },
+        "shipId": {
+          "name": "shipId",
+          "description": "託運單號",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "98737870, 98737871"
+        },
+        "transdate": {
+          "name": "transDate",
+          "description": "轉單日",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          },
+          "example": "2021/01/01-2021/01/30"
+        },
+        "shipStatus": {
+          "name": "shipStatus",
+          "description": "出貨狀態:\n  * shiped : 已出貨\n  * not : 未出貨\n  * all : 全部\n",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          },
+          "example": "not"
+        },
+        "takeStatus": {
+          "name": "takeStatus",
+          "description": "取件狀態:\n  * taked : 已取件\n  * not : 未取件\n  * all : 全部\n",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          },
+          "example": "not"
+        },
+        "q": {
+          "name": "q",
+          "description": "關鍵字(訂單編號、託運單號)",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          },
+          "example": "20210707522762-01"
+        },
+        "takeDate": {
+          "name": "takeDate",
+          "description": "預計取件日",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          },
+          "example": "2021/01/31"
+        },
+        "offset": {
+          "name": "offset",
+          "description": "查詢開始位置",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "default": 1
+          }
+        },
+        "limit": {
+          "name": "limit",
+          "description": "回傳的資料筆數",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "default": 20
+          }
+        }
+      }
+    }
+  }
