@@ -1,14 +1,20 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	. "foodlisa/config"
+	"foodlisa/orm"
+	"foodlisa/router"
+)
+
+
 
 func main() {
-	r := gin.Default()
+	/* GORM */
+	dsn := fmt.Sprint(USERNAME,":",PASSWORD,"@tcp(",HOST,":",PORT,")/",DATABASE,"?charset=utf8mb4&parseTime=True&loc=Local")
+	var DB = orm.InitDatabase(dsn)
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Welcome to FoodLisa.",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	/* GIN framework*/
+	var router = router.InitRouter(DB)
+	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
