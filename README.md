@@ -11,27 +11,31 @@
 
 ## Usage
 
-本地安裝需要 package
-```
-cd app
-go mod download
-```
-
 建 image
 ```
-docker build -t lisa/foodlisa:1.2 ../docker/foodlisa_1.2 
+cd foodlisa
+docker build -t lisa/foodlisa:1.2 ./docker/foodlisa_1.2 
 ```
 
 建container
 ```
-docker compose -f ../docker/docker-compose.yml up -d
+docker-compose -f ./docker/docker-compose.yml up -d
 ```
-
 
 
 打開localhost:8080即可看到
 ```
 {"message":"Welcome to FoodLisa"}
+```
+
+### 本機開發
+
+如果你需要在本機開發（但是跑在container裡）, 則本機也要裝 go 和相關套件, 不然 IDE 會報錯
+
+請自行安裝 go, 並透過 go mod 安裝 package 
+```
+cd app
+go mod download
 ```
 
 
