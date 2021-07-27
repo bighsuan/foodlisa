@@ -16,7 +16,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ${PWD}:/app:delegated
+      - ${PWD}/app:/app:delegated
     links:
       - db
     # stdin_open: true # -i
