@@ -21,14 +21,7 @@ func (obj *GET) Process() {
 	result := obj.DB.Take(&product, obj.C.Param("id"))
 
 	if result.Error == nil {
-		obj.C.JSON(http.StatusOK, gin.H{
-			"id": product.ID,
-			"storeId": product.StoreID,
-			"name": product.Name,
-			"price": product.Price,
-			"comment": product.Comment,
-			"imageUrl": product.ImageUrl,
-		})
+		obj.C.JSON(http.StatusOK, product)
 	} else {
 		obj.C.JSON(400, gin.H{
 			"message": "Product not found.",

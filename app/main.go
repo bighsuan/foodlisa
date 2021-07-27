@@ -16,5 +16,6 @@ func main() {
 
 	/* GIN framework*/
 	var router = router.InitRouter(DB)
+
 	router.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

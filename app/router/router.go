@@ -4,12 +4,16 @@ import (
 	"foodlisa/router/api/v1/prods"
 	"foodlisa/router/api/v1/prods/id"
 	"foodlisa/router/baseHandler"
+	"foodlisa/router/middleware"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 	router = gin.Default()
+	// CORS middleware
+	router.Use(middleware.CORSMiddleware())
+	//router.Use(middleware.Cors()) //开启中间件 允许使用跨域请求
 
 	// Global middleware
 	// Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
@@ -18,8 +22,7 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
 	router.Use(gin.Recovery())
-
-
+	
 	v1 := router.Group("/api/v1")
 	{
 		// 商品
@@ -28,15 +31,14 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 		v1.PUT("/prods/:id", getHandlerFunc(DB))
 		v1.POST("/prods", getHandlerFunc(DB))
 		v1.DELETE("/prods/:id", getHandlerFunc(DB))
-
-
-		// 測試
-		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "Welcome to FoodLisa.",
-			})
-		})
 	}
+
+	// 測試
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Welcome to FoodLisa.",
+		})
+	})
 
 	return
 }

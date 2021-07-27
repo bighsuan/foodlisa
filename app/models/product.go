@@ -8,7 +8,7 @@ type Product struct {
 	CategoryID int       `json:"categoryId"`
 	Name       string    `json:"name"`
 	Price      int       `json:"price"`
-	Comment    string    `json:"comment"`
+	Comment    string    `json:"description"`
 	ImageUrl   string    `json:"imageUrl"`
 	CreatedAt  time.Time `json:""`
 	UpdatedAt  time.Time `json:""`
