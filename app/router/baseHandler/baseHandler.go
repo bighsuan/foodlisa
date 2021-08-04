@@ -14,7 +14,7 @@ type IHandler interface {
 
 type BaseHandler struct {
 	DB       *gorm.DB
-	C        *gin.Context
+	Ctx      *gin.Context
 	Validate func()
 	Process  func()
 }

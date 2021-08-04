@@ -17,22 +17,22 @@ func (obj *DELETE) Validate() {
 func (obj *DELETE) Process() {
 	// 檢查商品是否存在
 	var product models.Product
-	result := obj.DB.Take(&product, obj.C.Param("id"))
+	result := obj.DB.Take(&product, obj.Ctx.Param("id"))
 
 	if result.Error != nil {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "Product is not exist.",
 		})
 		return
 	}
 
 	// 刪除
-	result = obj.DB.Delete(&models.Product{}, obj.C.Param("id"))
+	result = obj.DB.Delete(&models.Product{}, obj.Ctx.Param("id"))
 
 	if result.Error == nil {
-		obj.C.JSON(204, "")
+		obj.Ctx.JSON(204, "")
 	} else {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "Delete failed.",
 		})
 	}

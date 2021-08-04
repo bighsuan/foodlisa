@@ -18,12 +18,12 @@ func (obj *GET) Validate() {
 
 func (obj *GET) Process() {
 	var product models.Product
-	result := obj.DB.Take(&product, obj.C.Param("id"))
+	result := obj.DB.Take(&product, obj.Ctx.Param("id"))
 
 	if result.Error == nil {
-		obj.C.JSON(http.StatusOK, product)
+		obj.Ctx.JSON(http.StatusOK, product)
 	} else {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "Product not found.",
 		})
 	}

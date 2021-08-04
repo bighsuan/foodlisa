@@ -17,17 +17,17 @@ func (obj *PUT) Validate() {
 func (obj *PUT) Process() {
 	// 檢查商品是否存在
 	var product models.Product
-	result := obj.DB.Take(&product, obj.C.Param("id"))
+	result := obj.DB.Take(&product, obj.Ctx.Param("id"))
 
 	if result.Error != nil {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "Product is not exist.",
 		})
 		return
 	}
 
 	var json models.Product
-	obj.C.BindJSON(&json)
+	obj.Ctx.BindJSON(&json)
 
 	// 不使用 DB.Save() 因為有些欄位沒有輸入值
 	// obj.DB.Model(&product).Update("CategoryID", json.CategoryID)
@@ -36,5 +36,5 @@ func (obj *PUT) Process() {
 	obj.DB.Model(&product).Update("Comment", json.Comment)
 	obj.DB.Model(&product).Update("ImageUrl", json.ImageUrl)
 
-	obj.C.JSON(204, "")
+	obj.Ctx.JSON(204, "")
 }

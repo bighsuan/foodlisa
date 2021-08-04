@@ -18,17 +18,21 @@ func (obj *POST) Validate() {
 
 func (obj *POST) Process() {
 	var product models.Product
-	obj.C.BindJSON(&product)
+	obj.Ctx.BindJSON(&product)
 
-	product.StoreID = 1
+	// 給預設值
+	if product.StoreID == 0 {
+		product.StoreID = 1
+	}
+
 	product.CategoryID = 1
 
 	result := obj.DB.Create(&product)
 	if result.Error == nil {
 		obj.DB.Save(&product)
-		obj.C.JSON(204, "")
+		obj.Ctx.JSON(204, "")
 	} else {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "Create failed.",
 		})
 	}

@@ -20,9 +20,9 @@ func (obj *GET) Process() {
 	result := obj.DB.Find(&products)
 
 	if result.Error == nil {
-		obj.C.JSON(http.StatusOK, products)
+		obj.Ctx.JSON(http.StatusOK, products)
 	} else {
-		obj.C.JSON(400, gin.H{
+		obj.Ctx.JSON(400, gin.H{
 			"message": "DB query failed.",
 		})
 	}
