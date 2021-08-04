@@ -20,13 +20,13 @@ type POST struct {
 
 // custom claims
 type Claims struct {
-	Id string      `json:"id"`
+	userId string      `json:"id"`
 	jwt.StandardClaims
 }
 
 var body struct{
-	Phone string
-	Password string
+	phone string
+	password string
 }
 
 // jwt secret key
@@ -49,7 +49,7 @@ func (obj *POST) Process() {
 	}
 
 	var user models.User
-	result := obj.DB.Where(&models.User{Phone: body.Phone}).First(&user)
+	result := obj.DB.Where(&models.User{Phone: body.phone}).First(&user)
 
 	if result.Error != nil {
 		obj.Ctx.JSON(400, gin.H{
@@ -59,7 +59,7 @@ func (obj *POST) Process() {
 	}
 
 	// 密碼解密
-	encryPassword, err := base64.StdEncoding.DecodeString(body.Password)
+	encryPassword, err := base64.StdEncoding.DecodeString(body.password)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -84,7 +84,7 @@ func (obj *POST) Process() {
 
 		// set claims and sign
 		claims := Claims{
-			Id: strconv.Itoa(int(user.ID)),
+			userId: strconv.Itoa(int(user.ID)),
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: now.Add(24 * time.Hour).Unix(),
 			},
