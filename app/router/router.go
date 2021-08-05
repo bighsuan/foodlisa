@@ -48,6 +48,7 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 	// 登入, 註冊
 	v1.GET("/publickey", getHandlerFunc(DB))
 	v1.POST("/sessions", getHandlerFunc(DB))
+	v1.POST("/users", getHandlerFunc(DB)) // 註冊
 
 	v1.Use(middleware.JwtMiddleware)
 	{
@@ -62,7 +63,6 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 		v1.DELETE("/prods/:id", getHandlerFunc(DB))
 
 		// member
-		v1.POST("/users", getHandlerFunc(DB)) // 註冊
 		v1.GET("/users/:id", getHandlerFunc(DB))
 		v1.PUT("/users/:id", getHandlerFunc(DB))
 		v1.PUT("/users/:id/password", getHandlerFunc(DB)) //修改密碼
