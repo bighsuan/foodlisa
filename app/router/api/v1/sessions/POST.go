@@ -76,7 +76,7 @@ func (obj *POST) Process() {
 
 		// custom claims
 		type Claims struct {
-			userId string      `json:"id"`
+			UserId string      `json:"id"`
 			jwt.StandardClaims
 		}
 
@@ -86,7 +86,7 @@ func (obj *POST) Process() {
 
 		// set claims and sign
 		claims := Claims{
-			userId: strconv.Itoa(int(userInDb.ID)),
+			UserId: strconv.Itoa(int(userInDb.ID)),
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: now.Add(24 * time.Hour).Unix(),
 			},
