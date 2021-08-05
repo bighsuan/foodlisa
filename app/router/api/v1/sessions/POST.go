@@ -99,6 +99,7 @@ func (obj *POST) Process() {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"id": user.ID,
+			"name": user.FirstName,
 			"token": token,
 		})
 	}
