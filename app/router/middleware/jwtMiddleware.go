@@ -8,7 +8,7 @@ import (
 )
 // custom claims
 type Claims struct {
-	Id string      `json:"id"`
+	UserId string      `json:"id"`
 	jwt.StandardClaims
 }
 
@@ -46,7 +46,7 @@ func JwtMiddleware(c *gin.Context) {
 		return
 	}
 	if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-		c.Set("Id", claims.Id)
+		c.Set("Id", claims.UserId)
 		c.Next()
 	} else {
 		c.Abort()
