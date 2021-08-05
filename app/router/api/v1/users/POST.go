@@ -46,17 +46,24 @@ func (obj *POST) Process() {
 	}
 
 	post.Username = post.Phone
+	fmt.Println(post)
 
 	//密碼解密
 	encryPassword, err := base64.StdEncoding.DecodeString(post.Password)
 	if err != nil {
 		fmt.Println(err.Error())
+		obj.Ctx.JSON(400, gin.H{
+			"message": "密碼加密錯誤（base64)",
+		})
 		return
 	}
 
 	decryPassword,err:=rsa.RsaDecrypt(encryPassword)
 	if err!=nil{
 		fmt.Println(err.Error())
+		obj.Ctx.JSON(400, gin.H{
+			"message": "密碼加密錯誤（rsa)",
+		})
 		return
 	}
 
@@ -66,13 +73,16 @@ func (obj *POST) Process() {
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(decryPassword), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
+		obj.Ctx.JSON(400, gin.H{
+			"message": "密碼加密錯誤（bcrypt)",
+		})
 	}
 	encodePW := string(hashPassword)  // 保存在数据库的密码，虽然每次生成都不同，只需保存一份即可
 	post.Password = encodePW
 
 	result = obj.DB.Create(&post)
 	if result.Error == nil {
-		obj.DB.Save(&user)
+		obj.DB.Save(&post)
 		obj.Ctx.Writer.WriteHeader(204)
 	} else {
 		obj.Ctx.JSON(400, gin.H{
