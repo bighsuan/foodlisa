@@ -4,6 +4,7 @@ import (
 	"foodlisa/models"
 	"foodlisa/router/baseHandler"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type PUT struct {
@@ -26,6 +27,14 @@ func (obj *PUT) Process() {
 		return
 	}
 
+	// 檢查是否是該用戶的商品
+	_user := obj.Ctx.MustGet("Id").(string)
+	loginUser, _ := strconv.Atoi(_user)
+	if loginUser != product.UserId {
+		obj.Ctx.Writer.WriteHeader(403)
+		return
+	}
+
 	var json models.Product
 	obj.Ctx.BindJSON(&json)
 
@@ -33,8 +42,8 @@ func (obj *PUT) Process() {
 	// obj.DB.Model(&product).Update("CategoryID", json.CategoryID)
 	obj.DB.Model(&product).Update("Name", json.Name)
 	obj.DB.Model(&product).Update("Price", json.Price)
-	obj.DB.Model(&product).Update("Comment", json.Comment)
+	obj.DB.Model(&product).Update("Description", json.Description)
 	obj.DB.Model(&product).Update("ImageUrl", json.ImageUrl)
 
-	obj.Ctx.JSON(204, "")
+	obj.Ctx.Writer.WriteHeader(204)
 }

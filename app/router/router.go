@@ -23,6 +23,8 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
 	router.Use(gin.Recovery())
 
+
+	// ssl 驗證用
 	const DOWNLOADS_PATH = "downloads/"
 
 	router.GET("/.test/pki/B78E08FB0DA3F3DA482B9E4FF5FC3D9B.txt", func (ctx *gin.Context) {
@@ -43,6 +45,7 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 		ctx.File(targetPath)
 	})
 
+
 	v1 := router.Group("/api/v1")
 
 	// 登入, 註冊
@@ -62,16 +65,16 @@ func InitRouter(DB *gorm.DB) (router *gin.Engine) {
 		v1.POST("/prods", getHandlerFunc(DB))
 		v1.DELETE("/prods/:id", getHandlerFunc(DB))
 
-		// member
-		v1.GET("/users/:id", getHandlerFunc(DB))
-		v1.PUT("/users/:id", getHandlerFunc(DB))
-		v1.PUT("/users/:id/password", getHandlerFunc(DB)) //修改密碼
-
-		// stores
-		v1.GET("/users/:id/stores", getHandlerFunc(DB))
-		v1.GET("/stores/1", getHandlerFunc(DB)) // 查某商店的資訊
-		v1.PUT("/stores/1", getHandlerFunc(DB)) // 改某商店的資訊
-		v1.DELETE("/stores/1", getHandlerFunc(DB)) // 刪除某商店
+		//// member
+		//v1.GET("/users/:id", getHandlerFunc(DB))
+		//v1.PUT("/users/:id", getHandlerFunc(DB))
+		//v1.PUT("/users/:id/password", getHandlerFunc(DB)) //修改密碼
+		//
+		//// stores
+		//v1.GET("/users/:id/stores", getHandlerFunc(DB))
+		//v1.GET("/stores/1", getHandlerFunc(DB)) // 查某商店的資訊
+		//v1.PUT("/stores/1", getHandlerFunc(DB)) // 改某商店的資訊
+		//v1.DELETE("/stores/1", getHandlerFunc(DB)) // 刪除某商店
 
 	}
 
@@ -103,7 +106,7 @@ func getHandlerFunc(DB *gorm.DB) gin.HandlerFunc {
 
 		case "/api/v1/publickey|GET": handler = &publickey.GET{BaseHandler: baseHandler.BaseHandler{Ctx: ctx, DB: DB}}
 		case "/api/v1/sessions|POST": handler = &sessions.POST{BaseHandler: baseHandler.BaseHandler{Ctx: ctx, DB: DB}}
-		case "/api/v1/sessions|DELETE": handler = &sessions.DELETE{BaseHandler: baseHandler.BaseHandler{Ctx: ctx, DB: DB}}
+		//case "/api/v1/sessions|DELETE": handler = &sessions.DELETE{BaseHandler: baseHandler.BaseHandler{Ctx: ctx, DB: DB}}
 
 		case "/api/v1/users|POST": handler = &users.POST{BaseHandler: baseHandler.BaseHandler{Ctx: ctx, DB: DB}}
 

@@ -73,7 +73,7 @@ func (obj *POST) Process() {
 	result = obj.DB.Create(&post)
 	if result.Error == nil {
 		obj.DB.Save(&user)
-		obj.Ctx.JSON(204, "")
+		obj.Ctx.Writer.WriteHeader(204)
 	} else {
 		obj.Ctx.JSON(400, gin.H{
 			"message": "註冊失敗",
