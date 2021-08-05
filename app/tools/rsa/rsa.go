@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	"fmt"
 )
 
 func RsaEncrypt(origData []byte) ([]byte, error) {
@@ -28,7 +27,6 @@ func RsaEncrypt(origData []byte) ([]byte, error) {
 
 func RsaDecrypt(ciphertext []byte) ([]byte, error) {
 	//解密
-	fmt.Println(PrivateKeyStr)
 	block, _ := pem.Decode([]byte(PrivateKeyStr))
 	if block == nil {
 		return nil, errors.New("private key error!")
