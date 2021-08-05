@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	"fmt"
 )
 
 func RsaEncrypt(origData []byte) ([]byte, error) {
