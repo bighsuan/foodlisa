@@ -27,7 +27,6 @@ func RsaEncrypt(origData []byte) ([]byte, error) {
 }
 
 func RsaDecrypt(ciphertext []byte) ([]byte, error) {
-	fmt.Println(PrivateKeyStr)
 	//解密
 	block, _ := pem.Decode([]byte(PrivateKeyStr))
 	if block == nil {
@@ -41,7 +40,6 @@ func RsaDecrypt(ciphertext []byte) ([]byte, error) {
 	// 解密
 	data,err := rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 	if err!=nil{
-		fmt.Println(err.Error())
 		return nil,err
 	}
 	return data,nil
